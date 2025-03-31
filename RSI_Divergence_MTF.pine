@@ -1,0 +1,36 @@
+//@version=6
+indicator("RSI Divergence + Multi-Timeframe RSI", overlay=false)
+
+// === User Settings ===
+rsi_length = input.int(14, title="RSI Length")
+htf = input.timeframe("D", title="Higher Timeframe for RSI Alignment")
+div_lookback = input.int(10, title="Lookback for Divergence Detection")
+
+// === RSI Calculations ===
+rsi = ta.rsi(close, rsi_length)
+rsi_htf = request.security(syminfo.tickerid, htf, ta.rsi(close, rsi_length))
+
+// === Plot RSI Values ===
+plot(rsi, title="RSI (Current TF)", color=color.white, linewidth=2)
+plot(rsi_htf, title="RSI (HTF)", color=color.orange, linewidth=2, style=plot.style_line)
+
+// === Threshold Lines ===
+hline(70, "Overbought", color=color.red, linestyle=hline.style_dashed)
+hline(50, "Neutral", color=color.gray, linestyle=hline.style_dotted)
+hline(30, "Oversold", color=color.green, linestyle=hline.style_dashed)
+
+// === Bullish Divergence Detection ===
+low_price = ta.lowest(close, div_lookback)
+low_rsi = ta.lowest(rsi, div_lookback)
+bull_div = close[1] < low_price and close > close[1] and rsi > low_rsi
+plotshape(bull_div, title="Bullish RSI Divergence", location=location.belowbar, style=shape.arrowup, color=color.green, size=size.small)
+
+// === Bearish Divergence Detection ===
+high_price = ta.highest(close, div_lookback)
+high_rsi = ta.highest(rsi, div_lookback)
+bear_div = close[1] > high_price and close < close[1] and rsi < high_rsi
+plotshape(bear_div, title="Bearish RSI Divergence", location=location.abovebar, style=shape.arrowdown, color=color.red, size=size.small)
+
+// === Alerts ===
+alertcondition(bull_div, title="Bullish RSI Divergence Alert", message="Bullish RSI divergence detected on NVDA.")
+alertcondition(bear_div, title="Bearish RSI Divergence Alert", message="Bearish RSI divergence detected on NVDA.")
