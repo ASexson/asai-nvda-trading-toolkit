@@ -3,8 +3,6 @@ asai-nvda-trading-toolkit/
 ├── NVDA_Scenario_Overlay.pine
 ├── RSI_Divergence_MTF.pine
 └── README.md
-ChatGPT said:
-Absolutely — here’s a clean and concise README.md file tailored for your asai-nvda-trading-toolkit repository:
 
 📊 ASAI NVDA Trading Toolkit
 A two-part Pine Script toolkit designed for technical analysis of NVIDIA (NVDA) stock using TradingView. It combines price-level-based zone analysis, momentum confirmation via MACD, and RSI-based reversal detection with multi-timeframe awareness.
